@@ -1,16 +1,18 @@
 package com.toptal.calories.model;
 
+import java.util.Date;
+
 public class Meal {
 	private Integer id;
 	private String text;
-	private String date;
-	private String time;
+	private Date date;
+	private Date time;
 	private Integer calories;
 
 	public Meal() {
 	}
 
-	public Meal(String text, String date, String time, Integer calories) {
+	public Meal(String text, Date date, Date time, Integer calories) {
 		this.setText(text);
 		this.setDate(date);
 		this.setTime(time);
@@ -33,19 +35,19 @@ public class Meal {
 		this.text = text;
 	}
 
-	public String getDate() {
+	public Date getDate() {
 		return this.date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
-	public String getTime() {
+	public Date getTime() {
 		return this.time;
 	}
 
-	public void setTime(String time) {
+	public void setTime(Date time) {
 		this.time = time;
 	}
 
