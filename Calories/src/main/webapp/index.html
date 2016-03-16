@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="caloriesApp">
+	<head>
+		<meta charset="UTF-8">
+		<title>Calories</title>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+      	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+      	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+      	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.min.js"></script>
+      	<script src="js/app.js"></script>
+      	<script src="js/controller.js"></script>
+      	<script src="js/services.js"></script>
+	</head>
+	<body>
+		<div ng-controller="mealController">
+			<form novalidate>
+    			Text: <input type="text" ng-model="meal.text" required />
+    			Calories: <input type="number" ng-model="meal.calories" required />
+    			Date: <input type="date" ng-model="meal.date" required />
+    			Time: <input type="time" ng-model="meal.time" required />
+    			<input type="button" ng-click="clear()" value="clear" />
+    			<input type="submit" ng-click="save(meal)" value="Save" />
+  			</form>
+			<ul>
+				<li ng-repeat="meal in meals track by $index">{{meal.text}}: {{meal.calories}}</li>
+			</ul>
+			{{meals}}
+		</div>
+	</body>
+</html>
