@@ -1,7 +1,5 @@
 package com.toptal.calories.resource;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
 
 import javax.ws.rs.client.ClientBuilder;
