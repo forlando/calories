@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="caloriesApp">
+<html lang="en" data-ng-app="caloriesApp">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Calories</title>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
-<body ng-controller="mainController">
+<body data-ng-controller="mainController">
 	<nav class="navbar navbar-default navbar-static-top">
 		<div class="container">
 			<div class="navbar-header">
@@ -20,80 +20,80 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="{{mealsActive}}" ng-show="logged"><a href="#" ng-click="meals()">Meals</a></li>
-					<li class="{{usersActive}}" ng-show="logged"><a href="#" ng-click="users(false)">Users</a></li>
+					<li class="{{mealsActive}}" data-ng-show="logged"><a href="#" data-ng-click="meals()">Meals</a></li>
+					<li class="{{usersActive}}" data-ng-show="logged"><a href="#" data-ng-click="users(false)">Users</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li ng-show="logged"><a href="#" ng-click="exit()">Exit</a></li>
+					<li data-ng-show="logged"><a href="#" data-ng-click="exit()">Exit</a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
 	<div id="mainArea" class="container" hidden="true">
-		<div class="container" ng-show="loginShow">
+		<div class="container" data-ng-show="loginShow">
 			<form name="loginForm">
 				<div class="page-header">
 		       		<h3>Please log in</h3>
 		     	</div>
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">Email:</span>
-					<input name="email" type="email" class="form-control" placeholder="Email" ng-model="login.email" required autofocus />
+					<input name="email" type="email" class="form-control" placeholder="Email" data-ng-model="login.email" required autofocus />
 				</div>
 				<br>
-				<div class="alert alert-danger" role="alert" ng-show="loginForm.$invalid || error">
-					<span class="error" ng-show="error">{{errorMessage}}<br></span>
-	   				<span class="error" ng-show="loginForm.email.$error.required">Email required!<br></span>
-					<span class="error" ng-show="loginForm.email.$error.email">Email not valid!<br></span>
+				<div class="alert alert-danger" role="alert" data-ng-show="loginForm.$invalid || error">
+					<span class="error" data-ng-show="error">{{errorMessage}}<br></span>
+	   				<span class="error" data-ng-show="loginForm.email.$error.required">Email required!<br></span>
+					<span class="error" data-ng-show="loginForm.email.$error.email">Email not valid!<br></span>
 	 			</div>
 				<br>
-				<button type="button" class="btn btn-default btn-sm" ng-disabled="loginForm.$invalid" ng-click="login(login.email)">Sign in</button>
-				<button type="button" class="btn btn-default btn-sm" ng-click="users(true)">New user</button>
+				<button type="button" class="btn btn-default btn-sm" data-ng-disabled="loginForm.$invalid" data-ng-click="login(login.email)">Sign in</button>
+				<button type="button" class="btn btn-default btn-sm" data-ng-click="users(true)">New user</button>
 			</form>
 	    </div>
-		<div class="container" ng-controller="mealController" ng-show="mealsShow">
+		<div class="container" data-ng-controller="mealController" data-ng-show="mealsShow">
 			<div class="page-header">
 	       		<h3>{{titleMeal}}</h3>
 	     	</div>
 			<form name="mealForm">
-				<input type="hidden" ng-model="meal.id" />
-				<div class="input-group input-group-sm" ng-show="loggedUser.role == 'Administrator'">
+				<input type="hidden" data-ng-model="meal.id" />
+				<div class="input-group input-group-sm" data-ng-show="loggedUser.role == 'Administrator'">
 					<span class="input-group-addon">Email:</span>
-					<input name="email" type="email" class="form-control" placeholder="User email" ng-model="meal.email" ng-required="loggedUser.role == 'Administrator'" />
+					<input name="email" type="email" class="form-control" placeholder="User email" data-ng-model="meal.email" data-ng-required="loggedUser.role == 'Administrator'" />
 				</div>
-				<br ng-show="loggedUser.role == 'Administrator'">
+				<br data-ng-show="loggedUser.role == 'Administrator'">
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">Text:</span>
-					<input name="text" type="text" class="form-control" placeholder="Meal description" ng-model="meal.text" required autofocus />
+					<input name="text" type="text" class="form-control" placeholder="Meal description" data-ng-model="meal.text" required autofocus />
 				</div>
 				<br>
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">Calories:</span>
-					<input name="calories" type="number" class="form-control" placeholder="Number of calories" ng-model="meal.calories" required />
+					<input name="calories" type="number" class="form-control" placeholder="Number of calories" data-ng-model="meal.calories" required />
 				</div>
 				<br>
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">Date:</span>
-					<input name="date" type="date" class="form-control" placeholder="yyyy-MM-dd" ng-model="meal.date" required />
+					<input name="date" type="date" class="form-control" placeholder="yyyy-MM-dd" data-ng-model="meal.date" required />
 				</div>
 				<br>
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">Time:</span>
-					<input name="time" type="time" class="form-control" placeholder="HH:mm:ss" ng-model="meal.time" required />
+					<input name="time" type="time" class="form-control" placeholder="HH:mm:ss" data-ng-model="meal.time" required />
 				</div>
 				<br>
-				<div class="alert alert-danger" role="alert" ng-show="mealForm.$invalid || error">
-					<span class="error" ng-show="error">{{errorMessage}}<br></span>
-	   				<span class="error" ng-show="mealForm.email.$error.required">Email required!<br></span>
-	   				<span class="error" ng-show="mealForm.email.$error.email">Email not valid!<br></span>
-	   				<span class="error" ng-show="mealForm.text.$error.required">Text required!<br></span>
-					<span class="error" ng-show="mealForm.calories.$error.required">Calories required!<br></span>
-					<span class="error" ng-show="mealForm.calories.$error.number">Calories not valid!<br></span>
-					<span class="error" ng-show="mealForm.date.$error.required">Date required!<br></span>
-					<span class="error" ng-show="mealForm.date.$error.date">Date not valid!<br></span>
-					<span class="error" ng-show="mealForm.time.$error.required">Time required!<br></span>
-					<span class="error" ng-show="mealForm.time.$error.time">Time not valid!<br></span>
+				<div class="alert alert-danger" role="alert" data-ng-show="mealForm.$invalid || error">
+					<span class="error" data-ng-show="error">{{errorMessage}}<br></span>
+	   				<span class="error" data-ng-show="mealForm.email.$error.required">Email required!<br></span>
+	   				<span class="error" data-ng-show="mealForm.email.$error.email">Email not valid!<br></span>
+	   				<span class="error" data-ng-show="mealForm.text.$error.required">Text required!<br></span>
+					<span class="error" data-ng-show="mealForm.calories.$error.required">Calories required!<br></span>
+					<span class="error" data-ng-show="mealForm.calories.$error.number">Calories not valid!<br></span>
+					<span class="error" data-ng-show="mealForm.date.$error.required">Date required!<br></span>
+					<span class="error" data-ng-show="mealForm.date.$error.date">Date not valid!<br></span>
+					<span class="error" data-ng-show="mealForm.time.$error.required">Time required!<br></span>
+					<span class="error" data-ng-show="mealForm.time.$error.time">Time not valid!<br></span>
 	 			</div>
-				<button type="button" class="btn btn-default btn-sm pull-right" ng-disabled="mealForm.$invalid" ng-click="saveMeal(meal)">
+				<button type="button" class="btn btn-default btn-sm pull-right" data-ng-disabled="mealForm.$invalid" data-ng-click="saveMeal(meal)">
 					<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 				</button>
 			</form>
@@ -103,26 +103,26 @@
 		     	</div>
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">Date:</span>
-					<input name="fromDate" type="date" class="form-control" placeholder="yyyy-MM-dd" ng-model="mealFilter.fromDate" />
+					<input name="fromDate" type="date" class="form-control" placeholder="yyyy-MM-dd" data-ng-model="mealFilter.fromDate" />
 					<span class="input-group-addon">to</span>
-					<input name="toDate" type="date" class="form-control" placeholder="yyyy-MM-dd" ng-model="mealFilter.toDate" />
+					<input name="toDate" type="date" class="form-control" placeholder="yyyy-MM-dd" data-ng-model="mealFilter.toDate" />
 				</div>
 				<br>
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">Time:</span>
-					<input name="fromTime" type="time" class="form-control" placeholder="HH:mm:ss" ng-model="mealFilter.fromTime" />
+					<input name="fromTime" type="time" class="form-control" placeholder="HH:mm:ss" data-ng-model="mealFilter.fromTime" />
 					<span class="input-group-addon">to</span>
-					<input name="toTime" type="time" class="form-control" placeholder="HH:mm:ss" ng-model="mealFilter.toTime" />
+					<input name="toTime" type="time" class="form-control" placeholder="HH:mm:ss" data-ng-model="mealFilter.toTime" />
 				</div>
 				<br>
-				<div class="alert alert-danger" role="alert" ng-show="mealFilterForm.$invalid || listError">
-					<span class="error" ng-show="listError">{{listErrorMessage}}<br></span>
-					<span class="error" ng-show="mealFilterForm.fromDate.$error.date">From date not valid!<br></span>
-					<span class="error" ng-show="mealFilterForm.fromTime.$error.time">From time not valid!<br></span>
-					<span class="error" ng-show="mealFilterForm.toDate.$error.date">To date not valid!<br></span>
-					<span class="error" ng-show="mealFilterForm.toTime.$error.time">To time not valid!<br></span>
+				<div class="alert alert-danger" role="alert" data-ng-show="mealFilterForm.$invalid || listError">
+					<span class="error" data-ng-show="listError">{{listErrorMessage}}<br></span>
+					<span class="error" data-ng-show="mealFilterForm.fromDate.$error.date">From date not valid!<br></span>
+					<span class="error" data-ng-show="mealFilterForm.fromTime.$error.time">From time not valid!<br></span>
+					<span class="error" data-ng-show="mealFilterForm.toDate.$error.date">To date not valid!<br></span>
+					<span class="error" data-ng-show="mealFilterForm.toTime.$error.time">To time not valid!<br></span>
 	 			</div>
-				<button type="button" class="btn btn-default btn-sm pull-right" ng-click="loadMeals(mealFilter)">
+				<button type="button" class="btn btn-default btn-sm pull-right" data-ng-click="loadMeals(mealFilter)">
 					<span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
 				</button>
 				<br>
@@ -141,7 +141,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="meal in meals track by $index">
+							<tr data-ng-repeat="meal in meals track by $index">
 								<td>{{meal.id}}</td>
 								<td>{{meal.email}}</td>
 								<td>{{meal.text}}</td>
@@ -149,12 +149,12 @@
 								<td>{{meal.date | date:'yyyy-MM-dd'}}</td>
 								<td>{{meal.time | date:'HH:mm:ss'}}</td>
 								<td>
-									<button type="button" class="btn btn-default btn-sm" ng-click="editMeal(meal.id)">
+									<button type="button" class="btn btn-default btn-sm" data-ng-click="editMeal(meal.id)">
 										<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 									</button>
 								</td>
 								<td>
-									<button type="button" class="btn btn-default btn-sm" ng-click="removeMeal(meal.id)">
+									<button type="button" class="btn btn-default btn-sm" data-ng-click="removeMeal(meal.id)">
 										<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 									</button>
 								</td>
@@ -164,35 +164,35 @@
 				</div>
 			</form>
 		</div>
-		<div class="container" ng-controller="userController" ng-show="usersShow">
+		<div class="container" data-ng-controller="userController" data-ng-show="usersShow">
 			<form name="userForm">
 				<div class="page-header">
 		       		<h3>{{titleUser}}</h3>
 		     	</div>
-				<input type="hidden" ng-model="user.id" />
+				<input type="hidden" data-ng-model="user.id" />
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">Email:</span>
-					<input name="email" type="email" class="form-control" placeholder="User email" ng-model="user.email" required autofocus />
+					<input name="email" type="email" class="form-control" placeholder="User email" data-ng-model="user.email" required autofocus />
 				</div>
 				<br>
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">First Name:</span>
-					<input name="firstName" type="text" class="form-control" placeholder="First Name" ng-model="user.firstName" required />
+					<input name="firstName" type="text" class="form-control" placeholder="First Name" data-ng-model="user.firstName" required />
 				</div>
 				<br>
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">Last Name:</span>
-					<input name="lastName" type="text" class="form-control" placeholder="Last Name" ng-model="user.lastName" required />
+					<input name="lastName" type="text" class="form-control" placeholder="Last Name" data-ng-model="user.lastName" required />
 				</div>
 				<br>
 				<div class="input-group input-group-sm">
 					<span class="input-group-addon">Daily Calories:</span>
-					<input name="dailyCalories" type="number" class="form-control" placeholder="User max daily calories" ng-model="user.dailyCalories" required />
+					<input name="dailyCalories" type="number" class="form-control" placeholder="User max daily calories" data-ng-model="user.dailyCalories" required />
 				</div>
-				<br ng-show="logged">
-				<input type="hidden" ng-model="user.role" value="Regular" ng-show="!logged || loggedUser.role == 'Regular'"/>
-				<div class="input-group input-group-sm" ng-show="logged && loggedUser.role != 'Regular'">
-					<select name="role" class="form-control" ng-model="user.role" ng-required="logged && loggedUser.role != 'Regular'">
+				<br data-ng-show="logged">
+				<input type="hidden" data-ng-model="user.role" value="Regular" data-ng-show="!logged || loggedUser.role == 'Regular'"/>
+				<div class="input-group input-group-sm" data-ng-show="logged && loggedUser.role != 'Regular'">
+					<select name="role" class="form-control" data-ng-model="user.role" data-ng-required="logged && loggedUser.role != 'Regular'">
 						<option value="">Select user role</option>
 	      				<option value="Regular">Regular</option>
 	      				<option value="Manager">Manager</option>
@@ -200,31 +200,31 @@
 	    			</select>
 				</div>
 				<br>
-				<div class="alert alert-danger" role="alert" ng-show="userForm.$invalid || error">
-					<span class="error" ng-show="error">{{errorMessage}}<br></span>
-	   				<span class="error" ng-show="userForm.email.$error.required">Email required!<br></span>
-	   				<span class="error" ng-show="userForm.email.$error.email">Email not valid!<br></span>
-					<span class="error" ng-show="userForm.firstName.$error.required">First name required!<br></span>
-					<span class="error" ng-show="userForm.lastName.$error.required">Last name required!<br></span>
-					<span class="error" ng-show="userForm.dailyCalories.$error.required">Daily calories required!<br></span>
-					<span class="error" ng-show="userForm.dailyCalories.$error.number">Daily calories not valid!<br></span>
-					<span class="error" ng-show="userForm.role.$error.required">Role required!<br></span>
+				<div class="alert alert-danger" role="alert" data-ng-show="userForm.$invalid || error">
+					<span class="error" data-ng-show="error">{{errorMessage}}<br></span>
+	   				<span class="error" data-ng-show="userForm.email.$error.required">Email required!<br></span>
+	   				<span class="error" data-ng-show="userForm.email.$error.email">Email not valid!<br></span>
+					<span class="error" data-ng-show="userForm.firstName.$error.required">First name required!<br></span>
+					<span class="error" data-ng-show="userForm.lastName.$error.required">Last name required!<br></span>
+					<span class="error" data-ng-show="userForm.dailyCalories.$error.required">Daily calories required!<br></span>
+					<span class="error" data-ng-show="userForm.dailyCalories.$error.number">Daily calories not valid!<br></span>
+					<span class="error" data-ng-show="userForm.role.$error.required">Role required!<br></span>
 	 			</div>
-				<button type="button" class="btn btn-default btn-sm pull-right" ng-disabled="userForm.$invalid" ng-click="saveUser(user)">
+				<button type="button" class="btn btn-default btn-sm pull-right" data-ng-disabled="userForm.$invalid" data-ng-click="saveUser(user)">
 					<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 				</button>
-				<div class="page-header" ng-show="logged  && loggedUser.role != 'Regular'"">
+				<div class="page-header" data-ng-show="logged  && loggedUser.role != 'Regular'">
 		       		<h3>Users</h3>
 		     	</div>
-				<div class="alert alert-danger" role="alert" ng-show="listError">
-					<span class="error" ng-show="listError">{{listErrorMessage}}<br></span>
+				<div class="alert alert-danger" role="alert" data-ng-show="listError">
+					<span class="error" data-ng-show="listError">{{listErrorMessage}}<br></span>
 	 			</div>
-				<button type="button" class="btn btn-default btn-sm pull-right" ng-click="loadUsers()"  ng-show="logged  && loggedUser.role != 'Regular'"">
+				<button type="button" class="btn btn-default btn-sm pull-right" data-ng-click="loadUsers()" data-ng-show="logged  && loggedUser.role != 'Regular'">
 					<span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
 				</button>
 				<br>
 				<div class="container">
-					<table class="table table-striped" ng-show="logged && loggedUser.role != 'Regular'">
+					<table class="table table-striped" data-ng-show="logged && loggedUser.role != 'Regular'">
 		  				<thead>
 							<tr>
 								<td>#</td>
@@ -238,7 +238,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="user in users track by $index">
+							<tr data-ng-repeat="user in users track by $index">
 								<td>{{user.id}}</td>
 								<td>{{user.email}}</td>
 								<td>{{user.firstName}}</td>
@@ -246,12 +246,12 @@
 								<td>{{user.dailyCalories}}</td>
 								<td>{{user.role}}</td>
 								<td>
-									<button type="button" class="btn btn-default btn-sm" ng-click="editUser(user.login)">
+									<button type="button" class="btn btn-default btn-sm" data-ng-click="editUser(user.login)">
 										<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 									</button>
 								</td>
 								<td>
-									<button type="button" class="btn btn-default btn-sm" ng-click="removeUser(user.login)">
+									<button type="button" class="btn btn-default btn-sm" data-ng-click="removeUser(user.login)">
 										<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 									</button>
 								</td>
