@@ -1,17 +1,19 @@
 package com.toptal.calories.service;
 
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.toptal.calories.model.Meal;
+import com.toptal.calories.model.User;
 
 public class MealService {
 	
 	private static AtomicInteger lastId = new AtomicInteger();
 	private static ConcurrentMap<Integer, Meal> meals = new ConcurrentHashMap<Integer, Meal>();
 
-	public Meal createUpdate(Meal meal) {
+	public Meal save(Meal meal) {
 		if (meal.getId() == null) {
 			meal.setId(MealService.lastId.incrementAndGet());
 		}
@@ -21,12 +23,11 @@ public class MealService {
 		return meal;
 	}
 
-	public Integer delete(Integer id) {
+	public void remove(Integer id) {
 		MealService.meals.remove(id);
-		return id;
 	}
 
-	public void delete() {
+	public void remove() {
 		MealService.meals.clear();
 	}
 
@@ -34,7 +35,7 @@ public class MealService {
 		return MealService.meals.get(id);
 	}
 
-	public Meal[] list() {
+	public Meal[] query(User user, Date fromDate, Date toDate, Date fromTime, Date toTime) {
 		return MealService.meals.values().toArray(new Meal[MealService.meals.size()]);
 	}
 }

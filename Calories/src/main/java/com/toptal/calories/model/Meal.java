@@ -4,19 +4,23 @@ import java.util.Date;
 
 public class Meal {
 	private Integer id;
+	private String email;
 	private String text;
 	private Date date;
 	private Date time;
 	private Integer calories;
+	private Boolean overDailyCalories;
 
 	public Meal() {
 	}
 
-	public Meal(String text, Date date, Date time, Integer calories) {
+	public Meal(String email, String text, Date date, Date time, Integer calories, Boolean overDailyCalories) {
+		this.setEmail(email);
 		this.setText(text);
 		this.setDate(date);
 		this.setTime(time);
 		this.setCalories(calories);
+		this.setOverDailyCalories(overDailyCalories);
 	}
 
 	public Integer getId() {
@@ -25,6 +29,14 @@ public class Meal {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getText() {
@@ -57,5 +69,13 @@ public class Meal {
 
 	public void setCalories(Integer calories) {
 		this.calories = calories;
+	}
+
+	public Boolean getOverDailyCalories() {
+		return this.overDailyCalories;
+	}
+
+	public void setOverDailyCalories(Boolean overDailyCalories) {
+		this.overDailyCalories = overDailyCalories;
 	}
 }

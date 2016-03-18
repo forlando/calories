@@ -1,29 +1,51 @@
 package com.toptal.calories.model;
 
 public class User {
-	private String login;
+	private Integer id;
+	private String email;
 	private String firstName;
 	private String lastName;
 	private Integer dailyCalories;
+	private String role;
 	private Meal[] meals;
 
 	public User() {
 	}
 
-	public User(String login, String firstName, String lastName, Integer dailyCalories, Meal[] meals) {
-		this.setLogin(login);
+	public User(String email, String firstName, String lastName, Integer dailyCalories, String role, Meal[] meals) {
+		this.setEmail(email);
 		this.setFirstName(firstName);
 		this.setLastName(lastName);
 		this.setDailyCalories(dailyCalories);
+		this.setRole(role);
 		this.setMeals(meals);
 	}
 
-	public String getLogin() {
-		return this.login;
+	public User(User user) {
+		if (user != null) {
+			this.setEmail(user.getEmail());
+			this.setFirstName(user.getFirstName());
+			this.setLastName(user.getLastName());
+			this.setDailyCalories(user.getDailyCalories());
+			this.setRole(user.getRole());
+			this.setMeals(user.getMeals());
+		}
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public Integer getId() {
+		return this.id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getFirstName() {
@@ -48,6 +70,14 @@ public class User {
 
 	public void setDailyCalories(Integer dailyCalories) {
 		this.dailyCalories = dailyCalories;
+	}
+
+	public String getRole() {
+		return this.role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public Meal[] getMeals() {
