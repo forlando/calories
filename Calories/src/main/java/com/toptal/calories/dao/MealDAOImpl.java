@@ -63,6 +63,8 @@ public class MealDAOImpl implements MealDAO {
 		if (filter.size() > 0) {
 			queryString.append(" WHERE ").append(String.join(" AND ", filter));
 		}
+	
+		queryString.append(" ORDER BY meal.date, meal.time ASC");
 		
 		
 		TypedQuery<MealEntity> query = this.manager.createQuery(queryString.toString(), MealEntity.class);

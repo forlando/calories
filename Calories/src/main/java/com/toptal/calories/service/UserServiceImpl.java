@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void remove(UserEntity loggedUser, String email) {
-		if (!loggedUser.getRole().equals("Regular")) {
+		if (!loggedUser.getRole().equals("Regular") && !loggedUser.getEmail().equals(email)) {
 			UserEntity user = this.dao.findByEmail(email);
 
 			if (user != null) {

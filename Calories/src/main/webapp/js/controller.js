@@ -1,15 +1,15 @@
 var caloriesControllers = angular.module('caloriesControllers', []);
 
-caloriesControllers.controller('mainController', ['$scope', 'loginFactory', function ($scope, Login) {
+caloriesControllers.controller('mainController', ['$scope', '$rootScope', 'loginFactory', function ($scope, $rootScope, Login) {
 	$scope.login = function(email) {
 		Login.get({param: email}, function(loggedUser) {
-    		$scope.logged = true;
-    		$scope.loggedUser = loggedUser;
+			$rootScope.logged = true;
+			$rootScope.loggedUser = loggedUser;
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
-    		$scope.meals();
+    	    $rootScope.showMeals();
     	}, function(error) {
 			$scope.logged = false;
 			$scope.loggedUser = null;
@@ -19,12 +19,13 @@ caloriesControllers.controller('mainController', ['$scope', 'loginFactory', func
     	    $scope.listErrorMessage = null;
     	});
     };
+    $rootScope.login = $scope.login;
 
 	$scope.exit = function() {
 		if ($scope.logged) {
 			Login.remove({param: $scope.loggedUser.token}, function() {
-				$scope.logged = false;
-				$scope.loggedUser = null;
+				$rootScope.logged = false;
+				$rootScope.loggedUser = null;
 	    	    $scope.error = false;
 	    	    $scope.errorMessage = null;
 	    	    $scope.listError = false;
@@ -35,6 +36,7 @@ caloriesControllers.controller('mainController', ['$scope', 'loginFactory', func
 
 		$scope.main();
     };
+    $rootScope.exit = $scope.exit;
 
     $scope.main = function() {
 		$scope.loginShow = true;
@@ -46,9 +48,12 @@ caloriesControllers.controller('mainController', ['$scope', 'loginFactory', func
 	    $scope.errorMessage = null;
 	    $scope.listError = false;
 	    $scope.listErrorMessage = null;
-    }
+    };
+    $rootScope.main = $scope.main;
 
-	$scope.meals = function() {
+	$scope.showMeals = function() {
+		$rootScope.loadMeals();
+
 		$scope.loginShow = false;
 		$scope.mealsShow = true;
 		$scope.usersShow = false;
@@ -59,9 +64,15 @@ caloriesControllers.controller('mainController', ['$scope', 'loginFactory', func
 	    $scope.listError = false;
 	    $scope.listErrorMessage = null;
     };
+    $rootScope.showMeals = $scope.showMeals;
 
-	$scope.users = function(newUser) {
-		$scope.newUser = newUser;
+	$scope.showUsers = function() {	    
+	    if ($rootScope.logged && $rootScope.loggedUser.role == "Regular") {
+	    	$rootScope.editUser($rootScope.loggedUser.email);
+		} else if ($rootScope.logged) {
+			$rootScope.loadUsers();
+		}
+
 		$scope.loginShow = false;
 		$scope.mealsShow = false;
 		$scope.usersShow = true;
@@ -71,30 +82,26 @@ caloriesControllers.controller('mainController', ['$scope', 'loginFactory', func
 	    $scope.errorMessage = null;
 	    $scope.listError = false;
 	    $scope.listErrorMessage = null;
-
-	    if ($scope.logged && $scope.loggedUser.role == "Regular") {
-	    	$scope.user = $scope.loggedUser;
-			$scope.titleUser = "Edit User";
-		}
     };
+    $rootScope.showUsers = $scope.showUsers;
 
     $scope.exit();
 }]);
 
-caloriesControllers.controller('mealController', ['$scope', 'mealFactory', function ($scope, Meal) {
+caloriesControllers.controller('mealController', ['$scope', '$rootScope', 'mealFactory', function ($scope, $rootScope, Meal) {
     $scope.saveMeal = function(meal) {
-    	if ($scope.loggedUser.role != 'Administrator') {
-    		meal.email = $scope.loggedUser.email;
+    	if ($rootScope.loggedUser.role != 'Administrator') {
+    		meal.email = $rootScope.loggedUser.email;
     	}
     	
-    	Meal.save({token: $scope.loggedUser.token}, meal, function(meal) {
+    	Meal.save({token: $rootScope.loggedUser.token}, meal, function(meal) {
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
-    		$scope.meal = undefined;
     		$scope.titleMeal = "New Meal";
-    		$scope.queryMeal();
+    		$scope.meal = undefined;
+    		$scope.loadMeals();
     	}, function(error) {
     	    $scope.error = true;
     	    $scope.errorMessage = "Error saving!";
@@ -102,14 +109,17 @@ caloriesControllers.controller('mealController', ['$scope', 'mealFactory', funct
     	    $scope.listErrorMessage = null;
     	});
     };
+    $rootScope.saveMeal = $scope.saveMeal;
 
     $scope.removeMeal = function(id) {
-    	Meal.remove({token: $scope.loggedUser.token, id: id}, function() {
+    	Meal.remove({token: $rootScope.loggedUser.token, id: id}, function() {
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
-    		$scope.queryMeal();
+    		$scope.titleMeal = "New Meal";
+    		$scope.meal = undefined;
+    		$scope.loadMeals();
     	}, function(error) {
     	    $scope.error = false;
     	    $scope.errorMessage = null;
@@ -117,13 +127,15 @@ caloriesControllers.controller('mealController', ['$scope', 'mealFactory', funct
     	    $scope.listErrorMessage = "Error removing!";
     	});
     };
+    $rootScope.removeMeal = $scope.removeMeal;
 
-	$scope.getMeal = function(id) {
-		Meal.get({token: $scope.loggedUser.token, id: id}, function(meal) {
+	$scope.editMeal = function(id) {
+		Meal.get({token: $rootScope.loggedUser.token, id: id}, function(meal) {
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
+    		$scope.titleMeal = "Edit Meal";
     		$scope.meal = meal;
     		$scope.meal.date = new Date($scope.meal.date);
     		$scope.meal.time = new Date($scope.meal.time);
@@ -133,18 +145,21 @@ caloriesControllers.controller('mealController', ['$scope', 'mealFactory', funct
     	    $scope.listError = true;
     	    $scope.listErrorMessage = "Error getting!";
     	});
-	}
+	};
+    $rootScope.editMeal = $scope.editMeal;
 
-	$scope.queryMeal = function(mealFilter) {
+	$scope.loadMeals = function(mealFilter) {
 		if (!mealFilter) {
 			mealFilter = {};
 		}
 		
-		Meal.query({token: $scope.loggedUser.token, fromDate: mealFilter.fromDate, toDate: mealFilter.toDate, fromTime: mealFilter.fromTime, toTime: mealFilter.toTime}, function(meals) {
+		Meal.query({token: $rootScope.loggedUser.token, fromDate: mealFilter.fromDate, toDate: mealFilter.toDate, fromTime: mealFilter.fromTime, toTime: mealFilter.toTime}, function(meals) {
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
+        	$scope.titleMeal = "New Meal";
+    		$scope.meal = undefined;
     		$scope.meals = meals;
     	}, function(error) {
     	    $scope.error = false;
@@ -152,44 +167,31 @@ caloriesControllers.controller('mealController', ['$scope', 'mealFactory', funct
     	    $scope.listError = true;
     	    $scope.listErrorMessage = "Error filtering!";
     	});
-	}
-
-    $scope.editMeal = function(id) {
-    	$scope.titleMeal = "Edit Meal";
-    	$scope.getMeal(id);
-    };
-
-    $scope.loadMeals = function(mealFilter) {
-    	$scope.titleMeal = "New Meal";
-    	$scope.queryMeal(mealFilter);
-    };
+	};
+    $rootScope.loadMeals = $scope.loadMeals;
 }]);
 
-caloriesControllers.controller('userController', ['$scope', 'userFactory', function ($scope, User) {
+caloriesControllers.controller('userController', ['$scope', '$rootScope', 'userFactory', function ($scope, $rootScope, User) {
     $scope.saveUser = function(user) {
-    	if (!$scope.logged) {
-    		$scope.loggedUser = user;
-    		$scope.loggedUser.token = "NEW";
+    	var token = "NEW";
+    	
+    	if ($rootScope.logged) {
+    		toke = $rootScope.loggedUser.token;
     	}
 
-    	User.save({token: $scope.loggedUser.token}, user, function(user) {
+    	User.save({token: token}, user, function(user) {
+        	if (!$rootScope.logged) {
+        		$rootScope.login(user.email);
+        	} else if ($rootScope.logged && $rootScope.loggedUser.role != "Regular") {
+        		$rootScope.loadUsers();
+    		} else if ($scope.logged) {
+    			$rootScope.editUser(user.email);
+    		}
+
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
-
-        	if (!$scope.logged) {
-        		$scope.login(user.email);
-        	}
-
-    		if ($scope.logged && $scope.loggedUser.role != "Regular") {
-    			$scope.user = undefined;
-        		$scope.titleUser = "New User";
-        		$scope.queryUser();
-    		} else {
-        		$scope.user = user;
-    			$scope.titleUser = "Edit User";
-    		}
     	}, function(error) {
     	    $scope.error = true;
     	    $scope.errorMessage = "Error saving!";
@@ -197,14 +199,17 @@ caloriesControllers.controller('userController', ['$scope', 'userFactory', funct
     	    $scope.listErrorMessage = null;
     	});
     };
+    $rootScope.saveUser = $scope.saveUser;
 
     $scope.removeUser = function(email) {
-    	User.remove({token: $scope.loggedUser.token, email: email}, function() {
+    	User.remove({token: $rootScope.loggedUser.token, email: email}, function() {
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
-    		$scope.queryUser();
+    		$scope.titleUser = "New User";
+			$scope.user = undefined;
+    		$scope.loadUsers();
     	}, function(error) {
     	    $scope.error = false;
     	    $scope.errorMessage = null;
@@ -212,13 +217,15 @@ caloriesControllers.controller('userController', ['$scope', 'userFactory', funct
     	    $scope.listErrorMessage = "Error removing!";
     	});
     };
+    $rootScope.removeUser = $scope.removeUser;
 
-	$scope.getUser = function(email) {
-		User.get({token: $scope.loggedUser.token, email: email}, function(user) {
+	$scope.editUser = function(email) {
+		User.get({token: $rootScope.loggedUser.token, email: email}, function(user) {
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
+    		$scope.titleUser = "Edit User";
     		$scope.user = user;
     	}, function(error) {
     	    $scope.error = false;
@@ -227,13 +234,16 @@ caloriesControllers.controller('userController', ['$scope', 'userFactory', funct
     	    $scope.listErrorMessage = "Error getting!";
     	});
 	}
+    $rootScope.editUser = $scope.editUser;
 
-	$scope.queryUser = function() {
-		User.query({token: $scope.loggedUser.token}, function(users) {
+	$scope.loadUsers = function() {
+		User.query({token: $rootScope.loggedUser.token}, function(users) {
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
+    		$scope.titleUser = "New User";
+			$scope.user = undefined;
     		$scope.users = users;
     	}, function(error) {
     	    $scope.error = false;
@@ -242,14 +252,5 @@ caloriesControllers.controller('userController', ['$scope', 'userFactory', funct
     	    $scope.listErrorMessage = "Error filtering!";
     	});
 	}
-
-    $scope.editUser = function(email) {
-    	$scope.titleUser = "Edit User";
-    	$scope.getUser(email);
-    };
-
-    $scope.loadUsers = function() {
-    	$scope.titleUser = "New User";
-    	$scope.queryUser();
-    };
+    $rootScope.loadUsers = $scope.loadUsers;
 }]);
