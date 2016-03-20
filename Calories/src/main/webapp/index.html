@@ -19,11 +19,11 @@
 				<a class="navbar-brand" href="#">Calories</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse" data-ng-show="logged">
-				<ul class="nav navbar-nav">
-					<li class="{{mealsActive}}"><a href="#" data-ng-click="meals()">Meals</a></li>
-					<li class="{{usersActive}}"><a href="#" data-ng-click="users(false)">Users</a></li>
+				<ul class="nav navbar-nav" data-ng-show="logged">
+					<li class="{{mealsActive}}"><a href="#" data-ng-click="meals()" data-ng-show="logged">Meals</a></li>
+					<li class="{{usersActive}}"><a href="#" data-ng-click="users(false)" data-ng-show="logged">Users</a></li>
 				</ul>
-				<ul class="nav navbar-nav navbar-right">
+				<ul class="nav navbar-nav navbar-right" data-ng-show="logged">
 					<li><a href="#" data-ng-click="exit()">Exit</a></li>
 				</ul>
 			</div>
@@ -190,9 +190,8 @@
 					<input name="dailyCalories" type="number" class="form-control" placeholder="User max daily calories" data-ng-model="user.dailyCalories" required />
 				</div>
 				<br data-ng-show="logged">
-				<input type="hidden" data-ng-model="user.role" value="Regular" data-ng-show="!logged || loggedUser.role == 'Regular'"/>
-				<div class="input-group input-group-sm" data-ng-show="logged && loggedUser.role != 'Regular'">
-					<select name="role" class="form-control" data-ng-model="user.role" data-ng-required="logged && loggedUser.role != 'Regular'">
+				<div class="input-group input-group-sm">
+					<select name="role" class="form-control" data-ng-model="user.role">
 						<option value="">Select user role</option>
 	      				<option value="Regular">Regular</option>
 	      				<option value="Manager">Manager</option>

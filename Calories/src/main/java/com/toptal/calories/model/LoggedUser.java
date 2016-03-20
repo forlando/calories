@@ -6,7 +6,7 @@ public class LoggedUser extends User {
 	public LoggedUser() {
 	}
 
-	public LoggedUser(User user, String token) {
+	public LoggedUser(UserEntity user, String token) {
 		super(user);
 		this.setToken(token);
 	}

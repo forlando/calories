@@ -1,39 +1,15 @@
 package com.toptal.calories.service;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
 
-import com.toptal.calories.model.User;
+import com.toptal.calories.model.UserEntity;
 
-public class UserService {
-	
-	private static AtomicInteger lastId = new AtomicInteger();
-	private static ConcurrentMap<String, User> users = new ConcurrentHashMap<String, User>();
+public interface UserService {
 
-	public User save(User user) {
-		if (user.getId() == null) {
-			user.setId(UserService.lastId.incrementAndGet());
-		}
-
-		UserService.users.put(user.getEmail(), user);
-		return user;
-	}
-
-	public void remove(String login) {
-		UserService.users.remove(login);
-	}
-
-	public void remove() {
-		UserService.users.clear();
-	}
-
-	public User get(String email) {
-		return UserService.users.get(email);
-	}
-
-	public User[] query() {
-		return UserService.users.values().toArray(new User[UserService.users.size()]);
-	}
+	public UserEntity save(UserEntity loggedUser, UserEntity user);
+	public void remove(UserEntity loggedUser, String email);
+	public UserEntity get(String email);
+	public UserEntity get(UserEntity loggedUser, String email);
+	public List<UserEntity> query(UserEntity loggedUser);
 
 }

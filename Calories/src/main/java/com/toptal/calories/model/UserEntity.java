@@ -1,18 +1,39 @@
 package com.toptal.calories.model;
 
-public class User {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table (name="User")
+public class UserEntity {
 	
+	@Id
+    @GeneratedValue
+    @Column(name="id", nullable=false)
 	private Integer id;
+
+	@Column(name="email", nullable=false, unique=true)
 	private String email;
+
+	@Column(name="firstName", nullable=false)
 	private String firstName;
+
+	@Column(name="lastName", nullable=false)
 	private String lastName;
+
+	@Column(name="dailyCalories", nullable=false)
 	private Integer dailyCalories;
+
+	@Column(name="role", nullable=false)
 	private String role;
 
-	public User() {
+	public UserEntity() {
 	}
-	
-	public User(String email, String firstName, String lastName, Integer dailyCalories, String role) {
+
+	public UserEntity(String email, String firstName, String lastName, Integer dailyCalories, String role) {
 		this.setEmail(email);
 		this.setFirstName(firstName);
 		this.setLastName(lastName);
@@ -20,7 +41,7 @@ public class User {
 		this.setRole(role);
 	}
 
-	public User(UserEntity user) {
+	public UserEntity(User user) {
 		this.setId(user.getId());
 		this.setEmail(user.getEmail());
 		this.setFirstName(user.getFirstName());

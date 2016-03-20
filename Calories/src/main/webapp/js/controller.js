@@ -168,7 +168,6 @@ caloriesControllers.controller('mealController', ['$scope', 'mealFactory', funct
 caloriesControllers.controller('userController', ['$scope', 'userFactory', function ($scope, User) {
     $scope.saveUser = function(user) {
     	if (!$scope.logged) {
-    		user.role = "Regular";
     		$scope.loggedUser = user;
     		$scope.loggedUser.token = "NEW";
     	}

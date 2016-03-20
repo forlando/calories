@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+
+<Configure id="server" class="org.eclipse.jetty.server.Server">
+	<New id="CaloriesDS" class="org.eclipse.jetty.plus.jndi.Resource">
+		<Arg></Arg>
+		<Arg>jdbc/CaloriesDS</Arg>
+		<Arg>
+			<New class="com.mchange.v2.c3p0.ComboPooledDataSource">
+				<Set name="driverClass">org.h2.Driver</Set>
+				<Set name="jdbcUrl">jdbc:h2:mem:calories;MODE=MySQL</Set>
+				<Set name="user">sa</Set>
+				<Set name="password">sa</Set>
+			</New>
+		</Arg>
+	</New>
+</Configure>

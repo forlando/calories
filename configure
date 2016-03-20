@@ -1,0 +1,44 @@
+#!/bin/bash
+
+echo "Looking for Java"
+
+if type -p java; then
+    echo "Found java executable in PATH"
+    _java=java
+else
+    echo "No java executable found in PATH, please add your java bin to PATH"
+fi
+
+if [[ "$_java" ]]; then
+    version=$("$_java" -version 2>&1 | awk -F '"' '/version/ {print $2}')
+    echo Version "$version"
+    if [[ "$version" < "1.8" ]]; then
+        echo "Java version should be greater than 1.8"
+        exit 1
+    fi
+fi
+
+echo "Configuring Project"
+
+if [ ! -d "./Calories/target" ]; then
+	mkdir ./Calories/target
+fi
+
+cd ./Calories/target
+
+echo "Downloading Maven"
+
+if type "curl" > /dev/null; then
+	curl -O http://ftp.unicamp.br/pub/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+else if type "wget" > /dev/null; then
+	wget http://ftp.unicamp.br/pub/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+fi
+fi
+
+echo "Extracting Maven"
+
+tar xzf apache-maven-3.3.9-bin.tar.gz
+
+echo "Cleanning Maven"
+
+rm apache-maven-3.3.9-bin.tar.gz

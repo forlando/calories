@@ -1,41 +1,16 @@
 package com.toptal.calories.service;
 
 import java.util.Date;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
 
-import com.toptal.calories.model.Meal;
-import com.toptal.calories.model.User;
+import com.toptal.calories.model.MealEntity;
+import com.toptal.calories.model.UserEntity;
 
-public class MealService {
-	
-	private static AtomicInteger lastId = new AtomicInteger();
-	private static ConcurrentMap<Integer, Meal> meals = new ConcurrentHashMap<Integer, Meal>();
+public interface MealService {
 
-	public Meal save(Meal meal) {
-		if (meal.getId() == null) {
-			meal.setId(MealService.lastId.incrementAndGet());
-		}
-		
-		MealService.meals.put(meal.getId(), meal);
+	public MealEntity save(UserEntity loggedUser, MealEntity meal);
+	public void remove(UserEntity loggedUser, Integer id);
+	public MealEntity get(UserEntity loggedUser, Integer id);
+	public List<MealEntity> query(UserEntity loggedUser, Date fromDate, Date toDate, Date fromTime, Date toTime);
 
-		return meal;
-	}
-
-	public void remove(Integer id) {
-		MealService.meals.remove(id);
-	}
-
-	public void remove() {
-		MealService.meals.clear();
-	}
-
-	public Meal get(Integer id) {
-		return MealService.meals.get(id);
-	}
-
-	public Meal[] query(User user, Date fromDate, Date toDate, Date fromTime, Date toTime) {
-		return MealService.meals.values().toArray(new Meal[MealService.meals.size()]);
-	}
 }

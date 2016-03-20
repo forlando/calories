@@ -8,13 +8,19 @@
 	<name>Calories Webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<jdk.version>1.8</jdk.version>
 		<compiler.version>3.5</compiler.version>
+		<jdk.version>1.8</jdk.version>
 		<war.version>2.3</war.version>
+		<slf4j.version>1.7.19</slf4j.version>
+		<jboss.logging.version>3.3.0.Final</jboss.logging.version>
 		<testng.version>6.9.10</testng.version>
-		<spring.version>4.2.5.RELEASE</spring.version>
 		<jersey.version>2.22.1</jersey.version>
+		<spring.version>4.2.5.RELEASE</spring.version>
+		<hibernate.version>5.1.0.Final</hibernate.version>
+		<failsafe.version>2.19.1</failsafe.version>
 		<jetty.version>9.3.7.v20160115</jetty.version>
+		<c3p0.version>0.9.5.2</c3p0.version>
+		<h2.version>1.4.191</h2.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -22,6 +28,21 @@
 			<artifactId>servlet-api</artifactId>
 			<version>${war.version}</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>${jboss.logging.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -39,15 +60,41 @@
 			<artifactId>jersey-media-moxy</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
-		<!--dependency> <groupId>org.glassfish.jersey.ext</groupId> <artifactId>jersey-spring3</artifactId> 
-			<version>${jersey.version}</version> </dependency> <dependency> <groupId>org.springframework</groupId> 
-			<artifactId>spring-core</artifactId> <version>${spring.version}</version> 
-			</dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-context</artifactId> 
-			<version>${spring.version}</version> </dependency> <dependency> <groupId>org.springframework</groupId> 
-			<artifactId>spring-context-support</artifactId> <version>${spring.version}</version> 
-			</dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-web</artifactId> 
-			<version>${spring.version}</version> </dependency> <dependency> <groupId>org.springframework</groupId> 
-			<artifactId>spring-tx</artifactId> <version>${spring.version}</version> </dependency -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.ext</groupId>
+			<artifactId>jersey-spring3</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -69,13 +116,44 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${failsafe.version}</version>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.mchange</groupId>
+						<artifactId>c3p0</artifactId>
+						<version>${c3p0.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+						<version>${h2.version}</version>
+					</dependency>
+				</dependencies>
 				<configuration>
-					<stopPort>8005</stopPort>
 					<stopKey>STOP</stopKey>
-					<contextPath>/calories</contextPath>
+					<stopPort>8081</stopPort>
+					<jettyXml>src/main/webapp/WEB-INF/jetty.xml</jettyXml>
 					<reload>manual</reload>
 				</configuration>
 				<executions>
@@ -87,6 +165,7 @@
 						</goals>
 						<configuration>
 							<daemon>true</daemon>
+							<reload>manual</reload>
 						</configuration>
 					</execution>
 					<execution>
