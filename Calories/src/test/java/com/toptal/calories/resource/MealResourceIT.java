@@ -31,7 +31,7 @@ public class MealResourceIT {
 	public void afterClass() {
 	}
 
-	@Test(priority = 3)
+	@Test(dependsOnMethods="testQuery(com.toptal.calories.resource.UserResourceIT)")
 	public void testSave(ITestContext context, Method method) {
 		LoggedUser loggedUser = (LoggedUser) context.getAttribute("loggedUser");
 		Meal meal1 = this.target.path(loggedUser.getToken()).request().post(Entity.entity(new Meal(loggedUser.getEmail(), "Meal 1", new Date(), new Date(), 500, true), MediaType.APPLICATION_JSON_TYPE)).readEntity(Meal.class);
@@ -46,7 +46,7 @@ public class MealResourceIT {
 		assertNotNull(meal5.getId());
 	}
 
-	@Test(priority = 4)
+	@Test(dependsOnMethods="testSave(com.toptal.calories.resource.MealResourceIT)")
 	public void testQuery(ITestContext context, Method method) {
 		LoggedUser loggedUser = (LoggedUser) context.getAttribute("loggedUser");
 		Meal[] meals = this.target.path(loggedUser.getToken()).request(MediaType.APPLICATION_JSON_TYPE).get(Meal[].class);

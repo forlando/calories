@@ -30,7 +30,7 @@ public class LoginResourceIT {
 	public void afterClass() {
 	}
 
-	@Test(priority = 1)
+	@Test(dependsOnMethods="testSave(com.toptal.calories.resource.UserResourceIT)")
 	public void testGet(ITestContext context, Method method) {
 		User user = (User) context.getAttribute("user");
 		LoggedUser loggedUser = this.target.path(user.getEmail()).request(MediaType.APPLICATION_JSON_TYPE).get(LoggedUser.class);

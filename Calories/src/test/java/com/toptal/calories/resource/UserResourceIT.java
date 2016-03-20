@@ -30,14 +30,15 @@ public class UserResourceIT {
 	public void afterClass() {
 	}
 
-	@Test(priority = 0)
+	@Test
 	public void testSave(ITestContext context, Method method) {
 		User user = this.target.path("NEW").request().post(Entity.entity(new User("forlando@gmail.com", "Fabricio", "Damasceno", 2000, "Regular"), MediaType.APPLICATION_JSON_TYPE)).readEntity(User.class);
+		assertNotNull(user);
 		assertEquals("forlando@gmail.com", user.getEmail());
 		context.setAttribute("user", user);
 	}
 
-	@Test(priority = 2)
+	@Test(dependsOnMethods="testGet(com.toptal.calories.resource.LoginResourceIT)")
 	public void testQuery(ITestContext context, Method method) {
 		LoggedUser loggedUser = (LoggedUser) context.getAttribute("loggedUser");
 		User[] users = this.target.path(loggedUser.getToken()).request(MediaType.APPLICATION_JSON_TYPE).get(User[].class);
