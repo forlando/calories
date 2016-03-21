@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Preconditions;
 import com.toptal.calories.dao.MealDAO;
 import com.toptal.calories.model.MealEntity;
 import com.toptal.calories.model.UserEntity;
@@ -17,11 +18,19 @@ import com.toptal.calories.model.UserEntity;
 public class MealServiceImpl implements MealService {
 
 	@Autowired
-	MealDAO dao;
+	private MealDAO dao;
 
 	@Override
 	public MealEntity save(UserEntity loggedUser, MealEntity meal) {
+		Preconditions.checkArgument(loggedUser != null, "Logged user can't be null");
+		Preconditions.checkArgument(meal != null, "Meal can't be null");
+		Preconditions.checkArgument(meal.getText() != null, "Meal text can't be null");
+		Preconditions.checkArgument(meal.getDate() != null, "Meal date can't be null");
+		Preconditions.checkArgument(meal.getTime() != null, "Meal time can't be null");
+		Preconditions.checkArgument(meal.getCalories() != null, "Meal calories can't be null");
+
 		if (loggedUser.getRole().equals("Administrator") || loggedUser.getId() == meal.getUser().getId()) {
+
 			if (meal.getId() != null) {
 				MealEntity mealDB = this.dao.findById(meal.getId());
 			
@@ -56,6 +65,9 @@ public class MealServiceImpl implements MealService {
 
 	@Override
 	public void remove(UserEntity loggedUser, Integer id) {
+		Preconditions.checkArgument(loggedUser != null, "Logged user can't be null");
+		Preconditions.checkArgument(id != null, "Meal id can't be null");
+
 		MealEntity meal = this.dao.findById(id);
 
 		if (loggedUser.getRole().equals("Administrator") || (meal != null && loggedUser.getId() == meal.getUser().getId())) {
@@ -73,6 +85,9 @@ public class MealServiceImpl implements MealService {
 
 	@Override
 	public MealEntity get(UserEntity loggedUser, Integer id) {
+		Preconditions.checkArgument(loggedUser != null, "Logged user can't be null");
+		Preconditions.checkArgument(id != null, "Meal id can't be null");
+
 		MealEntity meal = this.dao.findById(id);
 
 		if (loggedUser.getRole().equals("Administrator") || (meal != null && loggedUser.getId() == meal.getUser().getId())) {
@@ -88,6 +103,16 @@ public class MealServiceImpl implements MealService {
 
 	@Override
 	public List<MealEntity> query(UserEntity loggedUser, Date fromDate, Date toDate, Date fromTime, Date toTime) {
+		Preconditions.checkArgument(loggedUser != null, "Logged user can't be null");
+
+		if (fromDate != null && toDate != null) {
+			Preconditions.checkArgument(fromDate.equals(toDate) || fromDate.before(toDate), "From date can't be after to date");
+		}
+
+		if (fromTime != null && toTime != null) {
+			Preconditions.checkArgument(fromTime.equals(toTime) || fromTime.before(toTime), "From time can't be time to date");
+		}
+
 		if (loggedUser.getRole().equals("Administrator")) {
 			return this.dao.findByFilter(null, fromDate, toDate, fromTime, toTime);
 		} else {
