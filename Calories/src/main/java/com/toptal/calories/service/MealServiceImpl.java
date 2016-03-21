@@ -110,7 +110,7 @@ public class MealServiceImpl implements MealService {
 		}
 
 		if (fromTime != null && toTime != null) {
-			Preconditions.checkArgument(fromTime.equals(toTime) || fromTime.before(toTime), "From time can't be time to date");
+			Preconditions.checkArgument(fromTime.equals(toTime) || fromTime.before(toTime), "From time can't be after to time");
 		}
 
 		if (loggedUser.getRole().equals("Administrator")) {
