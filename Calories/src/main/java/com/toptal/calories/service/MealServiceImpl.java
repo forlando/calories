@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.toptal.calories.dao.MealDAO;
@@ -12,7 +13,7 @@ import com.toptal.calories.model.MealEntity;
 import com.toptal.calories.model.UserEntity;
 
 @Service
-@Transactional
+@Transactional(propagation=Propagation.REQUIRES_NEW)
 public class MealServiceImpl implements MealService {
 
 	@Autowired
@@ -25,12 +26,19 @@ public class MealServiceImpl implements MealService {
 				MealEntity mealDB = this.dao.findById(meal.getId());
 			
 				if (mealDB != null) {
-					mealDB.setUser(meal.getUser());
 					mealDB.setText(meal.getText());
 					mealDB.setDate(meal.getDate());
 					mealDB.setTime(meal.getTime());
 					mealDB.setCalories(meal.getCalories());
 					mealDB.setOverDailyCalories(meal.getOverDailyCalories());
+
+					if (meal.getUser().getId() != mealDB.getUser().getId()) {
+						UserEntity userDB = mealDB.getUser();
+						
+						mealDB.setUser(meal.getUser());
+	
+						this.checkDailyCalories(userDB, meal);
+					}
 				} else {
 					throw new IllegalArgumentException("Unknown meal id");
 				}
@@ -38,7 +46,7 @@ public class MealServiceImpl implements MealService {
 				this.dao.persist(meal);
 			}
 			
-			this.checkDailyCalories(loggedUser, meal);
+			this.checkDailyCalories(meal.getUser(), meal);
 
 			return meal;
 		} else {
@@ -54,7 +62,7 @@ public class MealServiceImpl implements MealService {
 			if (meal != null) {
 				this.dao.remove(meal);
 
-				this.checkDailyCalories(loggedUser, meal);
+				this.checkDailyCalories(meal.getUser(), meal);
 			} else {
 				 throw new IllegalArgumentException("Unknown meal id");
 			}
@@ -87,8 +95,8 @@ public class MealServiceImpl implements MealService {
 		}
 	}
 
-	private void checkDailyCalories(UserEntity loggedUser, MealEntity meal) {
-		List<MealEntity> mealsEntities = this.dao.findByFilter(loggedUser, meal.getDate(), meal.getDate(), null, null);
+	private void checkDailyCalories(UserEntity user, MealEntity meal) {
+		List<MealEntity> mealsEntities = this.dao.findByFilter(user, meal.getDate(), meal.getDate(), null, null);
 
 		Integer dailyCalories = 0;
 		
@@ -96,7 +104,7 @@ public class MealServiceImpl implements MealService {
 			dailyCalories += mealEntity.getCalories();
 		}
 
-		if (dailyCalories > loggedUser.getDailyCalories()) {
+		if (dailyCalories > user.getDailyCalories()) {
 			for (MealEntity mealEntity : mealsEntities) {
 				mealEntity.setOverDailyCalories(true);
 			}

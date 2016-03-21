@@ -1,20 +1,18 @@
 package com.toptal.calories.resource;
 
-import org.testng.ITestContext;
-
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
+import org.testng.ITestContext;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import static org.testng.AssertJUnit.*;
+
 
 import com.toptal.calories.model.LoggedUser;
 import com.toptal.calories.model.User;
-
-import static org.testng.AssertJUnit.*;
-
 public class LoginResourceIT {
 
 	private WebTarget target; 

@@ -14,7 +14,7 @@ caloriesControllers.controller('mainController', ['$scope', '$rootScope', 'login
 			$scope.logged = false;
 			$scope.loggedUser = null;
     	    $scope.error = true;
-    	    $scope.errorMessage = "User not found!";
+    	    $scope.errorMessage = (error)?(error.statusText + ": " + error.data):"User not found!";
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
     	});
@@ -104,7 +104,7 @@ caloriesControllers.controller('mealController', ['$scope', '$rootScope', 'mealF
     		$scope.loadMeals();
     	}, function(error) {
     	    $scope.error = true;
-    	    $scope.errorMessage = "Error saving!";
+    	    $scope.errorMessage = (error)?(error.statusText + ": " + error.data):"Error saving!";
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
     	});
@@ -124,7 +124,7 @@ caloriesControllers.controller('mealController', ['$scope', '$rootScope', 'mealF
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = true;
-    	    $scope.listErrorMessage = "Error removing!";
+    	    $scope.listErrorMessage = (error)?(error.statusText + ": " + error.data):"Error removing!";
     	});
     };
     $rootScope.removeMeal = $scope.removeMeal;
@@ -143,7 +143,7 @@ caloriesControllers.controller('mealController', ['$scope', '$rootScope', 'mealF
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = true;
-    	    $scope.listErrorMessage = "Error getting!";
+    	    $scope.listErrorMessage = (error)?(error.statusText + ": " + error.data):"Error getting!";
     	});
 	};
     $rootScope.editMeal = $scope.editMeal;
@@ -165,7 +165,7 @@ caloriesControllers.controller('mealController', ['$scope', '$rootScope', 'mealF
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = true;
-    	    $scope.listErrorMessage = "Error filtering!";
+    	    $scope.listErrorMessage = (error)?(error.statusText + ": " + error.data):"Error filtering!";
     	});
 	};
     $rootScope.loadMeals = $scope.loadMeals;
@@ -194,7 +194,7 @@ caloriesControllers.controller('userController', ['$scope', '$rootScope', 'userF
     	    $scope.listErrorMessage = null;
     	}, function(error) {
     	    $scope.error = true;
-    	    $scope.errorMessage = "Error saving!";
+    	    $scope.errorMessage = (error)?(error.statusText + ": " + error.data):"Error saving!";
     	    $scope.listError = false;
     	    $scope.listErrorMessage = null;
     	});
@@ -214,7 +214,7 @@ caloriesControllers.controller('userController', ['$scope', '$rootScope', 'userF
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = true;
-    	    $scope.listErrorMessage = "Error removing!";
+    	    $scope.listErrorMessage = (error)?(error.statusText + ": " + error.data):"Error removing!";
     	});
     };
     $rootScope.removeUser = $scope.removeUser;
@@ -231,7 +231,7 @@ caloriesControllers.controller('userController', ['$scope', '$rootScope', 'userF
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = true;
-    	    $scope.listErrorMessage = "Error getting!";
+    	    $scope.listErrorMessage = (error)?(error.statusText + ": " + error.data):"Error getting!";
     	});
 	}
     $rootScope.editUser = $scope.editUser;
@@ -249,7 +249,7 @@ caloriesControllers.controller('userController', ['$scope', '$rootScope', 'userF
     	    $scope.error = false;
     	    $scope.errorMessage = null;
     	    $scope.listError = true;
-    	    $scope.listErrorMessage = "Error filtering!";
+    	    $scope.listErrorMessage = (error)?(error.statusText + ": " + error.data):"Error filtering!";
     	});
 	}
     $rootScope.loadUsers = $scope.loadUsers;

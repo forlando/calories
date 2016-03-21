@@ -46,6 +46,15 @@ public class MealEntity {
 	public MealEntity() {
 	}
 
+	public MealEntity(UserEntity user, String text, Date date, Date time, Integer calories, boolean overDailyCalories) {
+		this.setUser(user);
+		this.setText(text);
+		this.setDate(date);
+		this.setTime(time);
+		this.setCalories(calories);
+		this.setOverDailyCalories(overDailyCalories);
+	}
+
 	public MealEntity(Meal meal, UserEntity user) {
 		this.setId(meal.getId());
 		this.setUser(user);

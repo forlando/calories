@@ -13,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,11 +42,9 @@ public class UserResource {
 		try {
 			return this.service.save(this.loginService.getLoggedUser(token), new UserEntity(user));
 		} catch(SecurityException exception) {
-			exception.printStackTrace();
-			throw new WebApplicationException(403);
-		} catch(IllegalArgumentException exception) {
-			exception.printStackTrace();
-			throw new WebApplicationException(404);
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
+		} catch(Exception exception) {
+			throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
 		}
 	}
 	
@@ -54,11 +54,9 @@ public class UserResource {
 		try {
 			this.service.remove(this.loginService.getLoggedUser(token), email);
 		} catch(SecurityException exception) {
-			exception.printStackTrace();
-			throw new WebApplicationException(403);
-		} catch(IllegalArgumentException exception) {
-			exception.printStackTrace();
-			throw new WebApplicationException(404);
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
+		} catch(Exception exception) {
+			throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
 		}
 	}
 
@@ -68,11 +66,9 @@ public class UserResource {
 		try {
 			return this.service.get(this.loginService.getLoggedUser(token), email);
 		} catch(SecurityException exception) {
-			exception.printStackTrace();
-			throw new WebApplicationException(403);
-		} catch(IllegalArgumentException exception) {
-			exception.printStackTrace();
-			throw new WebApplicationException(404);
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
+		} catch(Exception exception) {
+			throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
 		}
 	}
 	
@@ -90,11 +86,9 @@ public class UserResource {
 			
 			return users;
 		} catch(SecurityException exception) {
-			exception.printStackTrace();
-			throw new WebApplicationException(403);
-		} catch(IllegalArgumentException exception) {
-			exception.printStackTrace();
-			throw new WebApplicationException(404);
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
+		} catch(Exception exception) {
+			throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
 		}
 	}
 }

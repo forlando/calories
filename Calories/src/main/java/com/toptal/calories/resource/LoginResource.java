@@ -8,6 +8,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,8 +38,9 @@ public class LoginResource {
 			UserEntity user = this.userService.get(email);
 			return new LoggedUser(user, this.service.login(user));
 		} catch(SecurityException exception) {
-			exception.printStackTrace();
-			throw new WebApplicationException(403);
+			throw new WebApplicationException(Response.status(Status.UNAUTHORIZED).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
+		} catch(Exception exception) {
+			throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
 		}
 	}
 
@@ -47,11 +50,9 @@ public class LoginResource {
 		try {
 			this.service.logout(token);
 		} catch(SecurityException exception) {
-			exception.printStackTrace();
-			throw new WebApplicationException(403);
-		} catch(IllegalArgumentException exception) {
-			exception.printStackTrace();
-			throw new WebApplicationException(404);
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
+		} catch(Exception exception) {
+			throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN_TYPE).build());
 		}
 	}
 }
