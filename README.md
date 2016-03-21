@@ -21,7 +21,7 @@
 ##### Production environment:
 
 * After compile (`make`) deploy the war located on `target` directory to a Java EE Application Server (example Tomcat)
-* The J2EE EE Application Server most have a DataSource (`jndi:jdbc/CaloriesDS`) point to a empty MySQL DataBase (user with DBA permission)
+* The Java EE Application Server most have a DataSource (`jndi:jdbc/CaloriesDS`) pointing to a empty MySQL DataBase (user with DBA permission)
 
 ### Using the Application
 
@@ -41,4 +41,3 @@
 * Jetty
 * C3P0
 * H2
-
