@@ -15,30 +15,29 @@ import com.toptal.calories.model.Meal;
 
 import static org.testng.AssertJUnit.*;
 
-import java.lang.reflect.Method;
 import java.util.Date;
 
 public class MealResourceIT {
 
-	private WebTarget target;
-	
+	private WebTarget target; 
+
 	@BeforeClass
-	public void beforeClass() {
-        this.target = ClientBuilder.newClient().target("http://localhost:8080/rest/meals");
+	public void beforeClass(ITestContext context) {
+		this.target = ClientBuilder.newClient().target("http://localhost:8080/rest/meals");
 	}
 	
 	@AfterClass
-	public void afterClass() {
+	public void afterClass(ITestContext context) {
 	}
 
-	@Test(dependsOnMethods="testQuery(com.toptal.calories.resource.UserResourceIT)")
-	public void testSave(ITestContext context, Method method) {
+	@Test(groups="saveMeal", dependsOnGroups="loadUsers")
+	public void testSave(ITestContext context) {
 		LoggedUser loggedUser = (LoggedUser) context.getAttribute("loggedUser");
-		Meal meal1 = this.target.path(loggedUser.getToken()).request().post(Entity.entity(new Meal(loggedUser.getEmail(), "Meal 1", new Date(), new Date(), 500, true), MediaType.APPLICATION_JSON_TYPE)).readEntity(Meal.class);
-		Meal meal2 = this.target.path(loggedUser.getToken()).request().post(Entity.entity(new Meal(loggedUser.getEmail(), "Meal 2", new Date(), new Date(), 500, true), MediaType.APPLICATION_JSON_TYPE)).readEntity(Meal.class);
-		Meal meal3 = this.target.path(loggedUser.getToken()).request().post(Entity.entity(new Meal(loggedUser.getEmail(), "Meal 3", new Date(), new Date(), 500, true), MediaType.APPLICATION_JSON_TYPE)).readEntity(Meal.class);
-		Meal meal4 = this.target.path(loggedUser.getToken()).request().post(Entity.entity(new Meal(loggedUser.getEmail(), "Meal 4", new Date(), new Date(), 500, true), MediaType.APPLICATION_JSON_TYPE)).readEntity(Meal.class);
-		Meal meal5 = this.target.path(loggedUser.getToken()).request().post(Entity.entity(new Meal(loggedUser.getEmail(), "Meal 5", new Date(), new Date(), 500, true), MediaType.APPLICATION_JSON_TYPE)).readEntity(Meal.class);
+		Meal meal1 = this.target.path(loggedUser.getToken()).request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(new Meal(loggedUser.getEmail(), "Meal 1", new Date(), new Date(), 500, true), MediaType.APPLICATION_JSON_TYPE)).readEntity(Meal.class);
+		Meal meal2 = this.target.path(loggedUser.getToken()).request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(new Meal(loggedUser.getEmail(), "Meal 2", new Date(), new Date(), 500, true), MediaType.APPLICATION_JSON_TYPE)).readEntity(Meal.class);
+		Meal meal3 = this.target.path(loggedUser.getToken()).request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(new Meal(loggedUser.getEmail(), "Meal 3", new Date(), new Date(), 500, true), MediaType.APPLICATION_JSON_TYPE)).readEntity(Meal.class);
+		Meal meal4 = this.target.path(loggedUser.getToken()).request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(new Meal(loggedUser.getEmail(), "Meal 4", new Date(), new Date(), 500, true), MediaType.APPLICATION_JSON_TYPE)).readEntity(Meal.class);
+		Meal meal5 = this.target.path(loggedUser.getToken()).request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(new Meal(loggedUser.getEmail(), "Meal 5", new Date(), new Date(), 500, true), MediaType.APPLICATION_JSON_TYPE)).readEntity(Meal.class);
 		assertNotNull(meal1.getId());
 		assertNotNull(meal2.getId());
 		assertNotNull(meal3.getId());
@@ -46,8 +45,8 @@ public class MealResourceIT {
 		assertNotNull(meal5.getId());
 	}
 
-	@Test(dependsOnMethods="testSave(com.toptal.calories.resource.MealResourceIT)")
-	public void testQuery(ITestContext context, Method method) {
+	@Test(groups="loadMeals", dependsOnGroups="saveMeal")
+	public void testQuery(ITestContext context) {
 		LoggedUser loggedUser = (LoggedUser) context.getAttribute("loggedUser");
 		Meal[] meals = this.target.path(loggedUser.getToken()).request(MediaType.APPLICATION_JSON_TYPE).get(Meal[].class);
 		assertNotNull(meals);

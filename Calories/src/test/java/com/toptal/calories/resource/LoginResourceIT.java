@@ -1,7 +1,5 @@
 package com.toptal.calories.resource;
 
-import java.lang.reflect.Method;
-
 import org.testng.ITestContext;
 
 import javax.ws.rs.client.ClientBuilder;
@@ -19,19 +17,19 @@ import static org.testng.AssertJUnit.*;
 
 public class LoginResourceIT {
 
-	private WebTarget target;
-	
+	private WebTarget target; 
+
 	@BeforeClass
-	public void beforeClass() {
-        this.target = ClientBuilder.newClient().target("http://localhost:8080/rest/login");
+	public void beforeClass(ITestContext context) {
+		this.target = ClientBuilder.newClient().target("http://localhost:8080/rest/login");
 	}
 	
 	@AfterClass
-	public void afterClass() {
+	public void afterClass(ITestContext context) {
 	}
 
-	@Test(dependsOnMethods="testSave(com.toptal.calories.resource.UserResourceIT)")
-	public void testGet(ITestContext context, Method method) {
+	@Test(groups="login", dependsOnGroups="saveUser")
+	public void testGet(ITestContext context) {
 		User user = (User) context.getAttribute("user");
 		LoggedUser loggedUser = this.target.path(user.getEmail()).request(MediaType.APPLICATION_JSON_TYPE).get(LoggedUser.class);
 		assertNotNull(loggedUser);

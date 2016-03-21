@@ -4,14 +4,12 @@ import org.testng.annotations.Test;
 
 import static org.testng.AssertJUnit.*;
 
-import java.lang.reflect.Method;
-
 import org.testng.ITestContext;
 
 public class LoginResourceTest {
 
 	@Test
-	public void test(ITestContext context, Method method) {
+	public void test(ITestContext context) {
 		assertEquals("Not yet implemented", "Not yet implemented");
 	}
 
