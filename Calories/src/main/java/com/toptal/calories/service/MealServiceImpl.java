@@ -36,17 +36,24 @@ public class MealServiceImpl implements MealService {
 			
 				if (mealDB != null) {
 					mealDB.setText(meal.getText());
-					mealDB.setDate(meal.getDate());
 					mealDB.setTime(meal.getTime());
 					mealDB.setCalories(meal.getCalories());
 					mealDB.setOverDailyCalories(meal.getOverDailyCalories());
+
+					if (!meal.getDate().equals(mealDB.getDate())) {
+						Date dateDB = mealDB.getDate();
+						
+						mealDB.setDate(meal.getDate());
+	
+						this.checkDailyCalories(meal.getUser(), dateDB);
+					}
 
 					if (meal.getUser().getId() != mealDB.getUser().getId()) {
 						UserEntity userDB = mealDB.getUser();
 						
 						mealDB.setUser(meal.getUser());
 	
-						this.checkDailyCalories(userDB, meal);
+						this.checkDailyCalories(userDB, meal.getDate());
 					}
 				} else {
 					throw new IllegalArgumentException("Unknown meal id");
@@ -55,7 +62,7 @@ public class MealServiceImpl implements MealService {
 				this.dao.persist(meal);
 			}
 			
-			this.checkDailyCalories(meal.getUser(), meal);
+			this.checkDailyCalories(meal.getUser(), meal.getDate());
 
 			return meal;
 		} else {
@@ -74,7 +81,7 @@ public class MealServiceImpl implements MealService {
 			if (meal != null) {
 				this.dao.remove(meal);
 
-				this.checkDailyCalories(meal.getUser(), meal);
+				this.checkDailyCalories(meal.getUser(), meal.getDate());
 			} else {
 				 throw new IllegalArgumentException("Unknown meal id");
 			}
@@ -120,8 +127,8 @@ public class MealServiceImpl implements MealService {
 		}
 	}
 
-	private void checkDailyCalories(UserEntity user, MealEntity meal) {
-		List<MealEntity> mealsEntities = this.dao.findByFilter(user, meal.getDate(), meal.getDate(), null, null);
+	private void checkDailyCalories(UserEntity user, Date date) {
+		List<MealEntity> mealsEntities = this.dao.findByFilter(user, date, date, null, null);
 
 		Integer dailyCalories = 0;
 		
